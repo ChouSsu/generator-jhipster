@@ -80,6 +80,12 @@ const mockBlueprintSubGen = class extends ServerGenerator {
                         '        </createTable>\n' +
                         '    </changeSet>'
                 );
+            },
+            addLoadColumnStep() {
+                this.addLoadColumnToLiquibaseEntityChangeSet(
+                    `${SERVER_MAIN_RES_DIR}config/liquibase/changelog/dummy_changelog.xml`,
+                    '            <column name="loadColumn" type="string" />'
+                );
             }
         };
         return { ...phaseFromJHipster, ...customPhaseSteps };
@@ -151,6 +157,13 @@ describe('needle API server liquibase: JHipster server generator with blueprint'
             '            <column name="test" type="varchar(255)">\n' +
                 '                <constraints nullable="false" />\n' +
                 '            </column>'
+        );
+    });
+
+    it('Assert that load column is added to an existing changelog', () => {
+        assert.fileContent(
+            `${SERVER_MAIN_RES_DIR}config/liquibase/changelog/dummy_changelog.xml`,
+            '            <column name="loadColumn" type="string" />'
         );
     });
 
